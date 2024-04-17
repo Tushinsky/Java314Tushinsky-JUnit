@@ -14,17 +14,29 @@ public class Product {
     private double price;// цена продукта
     private String unitMeasuring;// единица измерения
     private String slashCode;// штрих-код продукта
-    private int actionType;// тип акции, в которой участвует продукт
     private int number;// порядковый номер продукта в очереди
     private double discount;// скидка на продукт
-
+    private boolean discountAction;
+    private int discountNumber;// порядковый номер продукта в акционной очереди
+    private String discountType;
+    
     public Product() {
+        discountAction = false;// товар изначально не участвует в акции
     }
 
+    /**
+     * Возвращает название продуута
+     * @return productName - назававние продукта
+     */
     public String getProductName() {
         return productName;
     }
 
+    /**
+     * Задаёт назавание продукта
+     * @param productName название прдукта (не менее 3 и не более 250 символов,
+     * недостающлие символы заменяются пробелами, лишние символы обрезаются)
+     */
     public void setProductName(String productName) {
         int len = productName.length();
         if(len < 3) {
@@ -44,10 +56,18 @@ public class Product {
         }
     }
 
+    /**
+     * Возвращает цену продукта
+     * @return price - цена продукта
+     */
     public double getPrice() {
         return price;
     }
 
+    /**
+     * Задаёт цену продукта
+     * @param price цена продукта
+     */
     public void setPrice(double price) {
         this.price = Math.abs(price);
         if(this.price < 0.01) {
@@ -55,10 +75,19 @@ public class Product {
         }
     }
 
+    /**
+     * Возвращает единицу измерения продукта
+     * @return unitMeasuring - единица измерения
+     */
     public String getUnitMeasuring() {
         return unitMeasuring;
     }
 
+    /**
+     * Задаёт единицу измерения продукта
+     * @param unitMeasuring единица измерения (строка длиной 2-5 символов,
+     * недостающие символы заменяютя пробелом, лишние символы обрезаются)
+     */
     public void setUnitMeasuring(String unitMeasuring) {
         int len = unitMeasuring.length();
         if(len < 2) {
@@ -78,10 +107,18 @@ public class Product {
         }
     }
 
+    /**
+     * Возвращает штрих-код продукта
+     * @return slashCode - штрих-код продукта
+     */
     public String getSlashCode() {
         return slashCode;
     }
 
+    /**
+     * Задаёт штрих-код продукта
+     * @param slashCode штрих-код продукта (строка длиной 13 символов)
+     */
     public void setSlashCode(String slashCode) {
         int len = slashCode.length();
         if(len < 13) {
@@ -97,29 +134,108 @@ public class Product {
         }
     }
 
-    public int getActionType() {
-        return actionType;
-    }
-
-    public void setActionType(int actionType) {
-        this.actionType = actionType;
-    }
-
+    /**
+     * Возвращает величину скидки на продукт
+     * @return discount - величина скидки
+     */
     public double getDiscount() {
         return discount;
     }
 
-    public void setDiscount(double discount) {
-        this.discount = discount;
-    }
-
+    /**
+     * Возвращает порядковый номер продукта в корзине
+     * @return number порядковый номер
+     */
     public int getNumber() {
         return number;
     }
 
+    /**
+     * Задаёт порядковый номер продукта в корзине
+     * @param number порядковый номер
+     */
     public void setNumber(int number) {
         this.number = number;
     }
     
+    /**
+     * Возвращает флаг участия продукта в акции
+     * @return true - если товар акционный, false - если нет
+     */
+    public boolean isDiscountAction() {
+        return discountAction;
+    }
+
+    /**
+     * Задаёт флаг участия продукта в акции
+     * @param discountAction true - если товар акционный, false - если нет
+     */
+    public void setDiscountAction(boolean discountAction) {
+        this.discountAction = discountAction;
+    }
+
+    /**
+     * Возвращает тип скидки на продукт
+     * @return тип скидки
+     */
+    public String getDiscountType() {
+        return discountType;
+    }
+
+    /**
+     * Задаёт тип скидки на товар
+     * @param discountType тип скидки - одна из констант DiscountTypeImpl
+     */
+    public void setDiscountType(String discountType) {
+        this.discountType = discountType;
+    }
+
     
+    /**
+     * Возвращает номер продукта в акционной очереди
+     * @return discountNumber - номер в акционной очереди
+     */
+    public int getDiscountNumber() {
+        return discountNumber;
+    }
+
+    /**
+     * Задайт номер продукта в акционной очереди
+     * @param discountNumber номер продукта
+     */
+    public void setDiscountNumber(int discountNumber) {
+        this.discountNumber = discountNumber;
+    }
+    
+    /**
+     * Вычисляет цену с учетом участия продукта в акции и скидки
+     * @return price - цена товара с учетом скидки, если она есть
+     */
+    public double calcDiscountPrice() {
+        // проверяем наличие товара в акции
+        if(!discountAction) {
+            return price;
+        } else {
+            // если товар участвует в акции, проверяем тип акции
+            switch(discountType) {
+                case DiscountTypeImpl.DISCOUNT_FREE:
+                    return getDiscountFree();
+                case DiscountTypeImpl.DISCOUNT_HALF:
+                    break;
+                case DiscountTypeImpl.DISCOUNT_SEASON:
+                    break;
+            }
+        }
+        return 0;
+        
+    }
+    
+    private double getDiscountFree() {
+        // проверяем номер товара в акционной очереди
+        if(discountNumber == 3) {
+            return 0.01;
+        } else {
+            return price;
+        }
+    }
 }

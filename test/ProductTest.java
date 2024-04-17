@@ -6,10 +6,8 @@
 
 import java314tushinskytddkata.Product;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -20,14 +18,6 @@ public class ProductTest {
     private Product product;
     
     public ProductTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
     }
     
     @Before
