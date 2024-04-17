@@ -143,6 +143,14 @@ public class Product {
     }
 
     /**
+     * Задаёт величину скидки в %
+     * @param discount величина скидки в %
+     */
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+    /**
      * Возвращает порядковый номер продукта в корзине
      * @return number порядковый номер
      */
@@ -221,9 +229,9 @@ public class Product {
                 case DiscountTypeImpl.DISCOUNT_FREE:
                     return getDiscountFree();
                 case DiscountTypeImpl.DISCOUNT_HALF:
-                    break;
+                    return getDiscountHalf();
                 case DiscountTypeImpl.DISCOUNT_SEASON:
-                    break;
+                    return getDiscountSeason();
             }
         }
         return 0;
@@ -237,5 +245,20 @@ public class Product {
         } else {
             return price;
         }
+    }
+
+    private double getDiscountHalf() {
+        // проверяем номер товара в акционной очереди
+        if(discountNumber == 2) {
+            return price / 2;
+        }
+        if(discountNumber == 3) {
+            return 0.01;
+        }
+        return price;
+    }
+
+    private double getDiscountSeason() {
+        return price * (100 - discount) / 100;
     }
 }

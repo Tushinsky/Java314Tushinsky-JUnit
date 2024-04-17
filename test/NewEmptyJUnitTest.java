@@ -46,19 +46,31 @@ public class NewEmptyJUnitTest {
      */
     @Test
     public void testCalcDiscountPrice() {
+        /*
+        товар в акции не участвует, номер его в корзине 1, номер очереди в акции 2, тип акции 50%
+         */
         product.setNumber(1);
         product.setDiscountAction(false);
         product.setDiscountNumber(2);
         product.setDiscountType(DiscountTypeImpl.DISCOUNT_HALF);
         product.setPrice(125.0);
         Assert.assertEquals(125.0, product.calcDiscountPrice(), 0);
+        /*
+        товар участвует в акции, тип акции - за 0,01 руб., номер его в очереди 3 (подпадает под акцию)
+         */
         product.setDiscountAction(true);
         product.setDiscountType(DiscountTypeImpl.DISCOUNT_FREE);
         product.setDiscountNumber(3);
         Assert.assertEquals(0.01, product.calcDiscountPrice(), 0);
+        // то же, только в очереди он 2 (под акцию не подпадает)
         product.setDiscountNumber(2);
         Assert.assertEquals(125.0, product.calcDiscountPrice(), 0);
-        
-        
+        // то же, только скидка теперь 50%
+        product.setDiscountType(DiscountTypeImpl.DISCOUNT_HALF);
+        Assert.assertEquals(62.5, product.calcDiscountPrice(), 0);
+        // товар акционный, скидка сезонная, от очереди не зависит
+        product.setDiscountType(DiscountTypeImpl.DISCOUNT_SEASON);
+        product.setDiscount(15);
+        Assert.assertEquals((125 * 0.85), product.calcDiscountPrice(), 0);
     }
 }
